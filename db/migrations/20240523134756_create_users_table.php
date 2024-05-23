@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateUserTable extends AbstractMigration
+final class CreateUsersTable extends AbstractMigration
 {
     public function change(): void
     {
-        $table = $this->table('user');
+        $table = $this->table('users');
         $table->addColumn('first_name', 'string', ['limit' => 50])
             ->addColumn('last_name', 'string', ['limit' => 50])
             ->addColumn('document', 'string', ['limit' => 20])
