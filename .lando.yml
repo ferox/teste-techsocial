@@ -13,3 +13,13 @@ services:
     overrides:
       extra_hosts:
         - "host.docker.internal:host-gateway"
+
+tooling:
+  migrate:
+    service: appserver
+    cmd:
+      - "vendor/bin/phinx migrate"
+  create-migration:
+    service: appserver
+    cmd:
+      - "vendor/bin/phinx create "

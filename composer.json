@@ -13,5 +13,8 @@
             "name": "Fernando dos Santos"
         }
     ],
-    "require": {}
+    "require": {
+        "robmorgan/phinx": "^0.16.0",
+        "vlucas/phpdotenv": "^5.6"
+    }
 }
