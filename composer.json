@@ -1,0 +1,17 @@
+{
+    "name": "ferox/techsocial",
+    "description": "Teste Técnico Desenvolvedor PHP TechSocial",
+    "type": "project",
+    "license": "GPL-3.0-only",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Fernando dos Santos"
+        }
+    ],
+    "require": {}
+}

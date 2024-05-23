@@ -1,0 +1,15 @@
+name: teste-php-techsocial
+recipe: lamp
+config:
+  webroot: public
+  php: 8.2
+  database: postgres
+  xdebug: true
+  config:
+    php: scripts/php.ini
+
+services:
+  appserver:
+    overrides:
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
