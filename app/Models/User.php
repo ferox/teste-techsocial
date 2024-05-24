@@ -114,6 +114,11 @@ class User
         return $this->created_at;
     }
 
+    public function setCreatedAt(DateTime $createdAt): void
+    {
+        $this->created_at = $createdAt;
+    }
+
     public function getUpdatedAt(): DateTime
     {
         return $this->updated_at;
