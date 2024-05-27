@@ -6,8 +6,7 @@ class RegisterController
 {
     public function register()
     {
-        // TODO Criar sistema de registro
-        echo 'Cadastro de usuários';
+        include __DIR__ . '/../../resources/views/register.php';
     }
 
 }

@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use DateTime;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,10 +43,12 @@ class UserController
         $response->send();
     }
 
-    public function create(): void
+    public function create(Request $request): void
     {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request->all();
+
+        $date = DateTime::createFromFormat('d/m/Y', $data['birth_date']);
+        $date_formated = $date->format('Y-m-d');
 
         $user = new User();
         $user->setFirstName($data['first_name']);
@@ -52,15 +56,22 @@ class UserController
         $user->setDocument($data['document']);
         $user->setEmail($data['email']);
         $user->setPhoneNumber($data['phone_number']);
-        $user->setBirthDate(new \DateTime($data['birth_date']));
+        $user->setBirthDate(new \DateTime($date_formated));
         $user->setCreatedAt(new \DateTime());
         $user->setUpdatedAt(new \DateTime());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $response = new Response(json_encode(['id' => $user->getId()]), Response::HTTP_CREATED, ['Content-Type' => 'application/json']);
-        $response->send();
+        // Define the userRegistered item in localStorage and redirect
+        echo '<script>
+                localStorage.setItem("userRegistered", "true");
+                window.location.href = "/login";
+             </script>';
+        exit;
+
+//        $response = new RedirectResponse('/login');
+//        $response->send();
     }
 
     public function edit($id)

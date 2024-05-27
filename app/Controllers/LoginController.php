@@ -6,8 +6,7 @@ class LoginController
 {
     public function login()
     {
-        // TODO Criar sistema de login
-        echo "Login";
+        include __DIR__ . '/../../resources/views/login.php';
     }
 
 }

@@ -33,9 +33,11 @@ class Router
             '/login' => ['GET' =>  fn() => (new LoginController())->login()],
             '/register' => ['GET' =>  fn() => (new RegisterController())->register()],
             '/dashboard' => ['GET' =>  fn() => (new DashboardController())->index()],
+            '/users/create' => [
+                'POST' => fn() => (new UserController($this->entityManager))->create($this->request)
+            ],
             '/dashboard/users' => [
                 'GET' => fn() => (new UserController($this->entityManager))->index(),
-                'POST' => fn() => (new UserController($this->entityManager))->create()
             ],
             '/dashboard/orders' => [
                 'GET' => fn() => (new OrderController($this->entityManager))->index(),
