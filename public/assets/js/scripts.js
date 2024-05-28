@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
         alertElement.style.display = 'block';
         localStorage.removeItem('userRegistered');
     }
+
+    if (localStorage.getItem('userDeleted') === 'true') {
+        const alertElement = document.getElementById('deletedAlert');
+        alertElement.style.display = 'block';
+        localStorage.removeItem('userDeleted');
+    }
+
+    if (localStorage.getItem('error') === 'true') {
+        const alertElement = document.getElementById('errorAlert');
+        alertElement.style.display = 'block';
+        localStorage.removeItem('error');
+    }
 });
 
 function closeAlert(event){

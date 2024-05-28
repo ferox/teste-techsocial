@@ -18,14 +18,21 @@ class UserController
         $this->entityManager = $entityManager;
     }
 
+    public function buildForm()
+    {
+        {
+            include __DIR__ . '/../../resources/views/user-form.php';
+        }
+    }
+
     public function index(): void
     {
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
-        $userArray = [];
+        $userList = [];
 
         foreach ($users as $user) {
-            $userArray[] = [
+            $userList[] = [
                 'id' => $user->getId(),
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
@@ -33,14 +40,11 @@ class UserController
                 'email' => $user->getEmail(),
                 'phone_number' => $user->getPhoneNumber(),
                 'birth_date' => $user->getBirthDate()->format('Y-m-d'),
-                'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
-                'updated_at' => $user->getUpdatedAt()->format('Y-m-d H:i:s')
             ];
         }
 
-        $response = new Response(json_encode($userArray), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        include __DIR__ . '/../../resources/views/users.php';
 
-        $response->send();
     }
 
     public function create(Request $request): void
@@ -63,7 +67,6 @@ class UserController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        // Define the userRegistered item in localStorage and redirect
         echo '<script>
                 localStorage.setItem("userRegistered", "true");
                 window.location.href = "/login";
@@ -87,14 +90,13 @@ class UserController
                 'email' => $user->getEmail(),
                 'phone_number' => $user->getPhoneNumber(),
                 'birth_date' => $user->getBirthDate()->format('Y-m-d'),
-                'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
-                'updated_at' => $user->getUpdatedAt()->format('Y-m-d H:i:s')
             ];
 
             $response = new Response(json_encode($userArray), Response::HTTP_OK, ['Content-Type' => 'application/json']);
         } else {
             $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
         }
+
         $response->send();
     }
 
@@ -125,14 +127,22 @@ class UserController
     public function destroy($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
+        $error = 'false';
+        $user_deleted = 'true';
+
         if ($user) {
             $this->entityManager->remove($user);
             $this->entityManager->flush();
-
-            $response = new Response(json_encode(['status' => 'User deleted']), Response::HTTP_OK, ['Content-Type' => 'application/json']);
         } else {
-            $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+            $error = "true";
+            $user_deleted = 'false';
         }
-        $response->send();
+
+        echo '<script>
+                localStorage.setItem("userDeleted", "' . $user_deleted . '");
+                localStorage.setItem("error", "' . $error . '");
+                window.location.href = "/dashboard/users";
+             </script>';
+        exit;
     }
 }

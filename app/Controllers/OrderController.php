@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Order;
 use App\Models\User;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,53 +18,54 @@ class OrderController
         $this->entityManager = $entityManager;
     }
 
+    public function buildForm()
+    {
+        include __DIR__ . '/../../resources/views/order-form.php';
+    }
+
     public function index()
     {
         $orders = $this->entityManager->getRepository(Order::class)->findAll();
 
-        $ordersListFormated = [];
+        $ordersList = [];
 
         foreach ($orders as $order) {
-            $ordersListFormated[] = [
+            $user = $this->entityManager->getRepository(User::class)->find($order->getUserId());
+            $ordersList[] = [
                 'id' => $order->getId(),
-                'user_id' => $order->getUserId(),
+                'user_name' => $user->getFirstName() . ' ' . $user->getLastName(),
                 'description' => $order->getDescription(),
-                'document' => $order->getDocument(),
                 'quantity' => $order->getQuantity(),
                 'price' => $order->getPrice(),
-                'created_at' => $order->getCreatedAt()->format('Y-m-d H:i:s'),
-                'updated_at' => $order->getUpdatedAt()->format('Y-m-d H:i:s')
             ];
         }
 
-        $response = new Response(json_encode($ordersListFormated), Response::HTTP_OK, ['Content-Type' => 'application/json']);
-        $response->send();
+        include __DIR__ . '/../../resources/views/orders.php';
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request->all();
 
-        $user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
-        if (!$user) {
-            $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
-            $response->send();
-            return;
-        }
+//        $user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
+//        if (!$user) {
+//            $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+//            $response->send();
+//            return;
+//        }
 
         $order = new Order();
-        $order->setUserId($user->getId());
-        $order->setDescription($data['description']);
-        $order->setQuantity($data['quantity']);
-        $order->setPrice($data['price']);
+        $order->setUserId(4);
+        $order->setDescription('Teste primeiro pedido');
+        $order->setQuantity(5);
+        $order->setPrice(234.99);
         $order->setCreatedAt(new \DateTime());
         $order->setUpdatedAt(new \DateTime());
 
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        $response = new Response(json_encode(['id' => $order->getId()]), Response::HTTP_CREATED, ['Content-Type' => 'application/json']);
+        $response = new RedirectResponse('/dashboard/orders');
         $response->send();
     }
 

@@ -32,16 +32,22 @@ class Router
             '/' => ['GET' =>  fn() => (new HomeController())->index()],
             '/login' => ['GET' =>  fn() => (new LoginController())->login()],
             '/register' => ['GET' =>  fn() => (new RegisterController())->register()],
-            '/dashboard' => ['GET' =>  fn() => (new DashboardController())->index()],
+            '/dashboard' => ['GET' =>  fn() => (new DashboardController($this->entityManager))->index()],
             '/users/create' => [
                 'POST' => fn() => (new UserController($this->entityManager))->create($this->request)
             ],
             '/dashboard/users' => [
                 'GET' => fn() => (new UserController($this->entityManager))->index(),
             ],
+            '/dashboard/users/form' => [
+                'GET' => fn() => (new UserController($this->entityManager))->buildForm(),
+            ],
+            '/dashboard/orders/form' => [
+                'GET' => fn() => (new OrderController($this->entityManager))->buildForm(),
+            ],
             '/dashboard/orders' => [
                 'GET' => fn() => (new OrderController($this->entityManager))->index(),
-                'POST' => fn() => (new OrderController($this->entityManager))->create()
+                'POST' => fn() => (new OrderController($this->entityManager))->create($this->request)
             ],
         ];
 
@@ -57,7 +63,6 @@ class Router
             '#^/dashboard/users/update/(\d+)$#' => fn($matches) => (new UserController($this->entityManager))->update($matches[1]),
             '#^/dashboard/users/delete/(\d+)$#' => fn($matches) => (new UserController($this->entityManager))->destroy($matches[1]),
             '#^/dashboard/orders/edit/(\d+)$#' => fn($matches) => (new OrderController($this->entityManager))->edit($matches[1]),
-            '#^/dashboard/orders/update/(\d+)$#' => fn($matches) => (new OrderController($this->entityManager))->update($matches[1]),
             '#^/dashboard/orders/delete/(\d+)$#' => fn($matches) => (new OrderController($this->entityManager))->destroy($matches[1]),
         ];
 
