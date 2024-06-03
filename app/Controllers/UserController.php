@@ -8,14 +8,17 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserController
 {
+    private $session;
     private EntityManager $entityManager;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->session = new Session();
     }
 
     public function buildForm()
@@ -51,6 +54,8 @@ class UserController
     {
         $data = $request->request->all();
 
+        $user_logged_in = $this->session->get('user');
+
         $date = DateTime::createFromFormat('d/m/Y', $data['birth_date']);
         $date_formated = $date->format('Y-m-d');
 
@@ -67,14 +72,19 @@ class UserController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        echo '<script>
+        if (isset($user_logged_in)) {
+            echo '<script>
+                localStorage.setItem("userRegistered", "true");
+                window.location.href = "/dashboard/users";
+             </script>';
+        } else {
+            echo '<script>
                 localStorage.setItem("userRegistered", "true");
                 window.location.href = "/login";
              </script>';
-        exit;
+        }
 
-//        $response = new RedirectResponse('/login');
-//        $response->send();
+        exit;
     }
 
     public function edit($id)
@@ -127,7 +137,19 @@ class UserController
     public function destroy($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
+        $user_logged_in = $this->session->get('user');
         $error = 'false';
+
+        if ($user->getId() === $user_logged_in) {
+            $error = "true";
+
+            echo '<script>
+                localStorage.setItem("error", "' . $error . '");
+                window.location.href = "/dashboard/users";
+             </script>';
+            exit;
+        }
+
         $user_deleted = 'true';
 
         if ($user) {

@@ -26,11 +26,23 @@
             <ul
                 class="flex flex-col lg:flex-row list-none lg:ml-auto items-center"
             >
+                <?php
+                    if (isset($user_logged_in)) { ?>
                 <li class="flex items-center">
                     <button
-                        class="text-white bg-pink-500 active:bg-pink-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                        type="button"
-                        onclick="location.href='/login'"
+                            class="text-white bg-pink-500 active:bg-pink-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                            type="button"
+                            onclick="location.href='/dashboard'"
+                    >
+                        <i class="fas fa-sign-in-alt"></i> Dashboard
+                    </button>
+                </li>
+                  <?php  } else { ?>
+                <li class="flex items-center">
+                    <button
+                            class="text-white bg-pink-500 active:bg-pink-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                            type="button"
+                            onclick="location.href='/login'"
                     >
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
@@ -38,13 +50,14 @@
 
                 <li class="flex items-center">
                     <button
-                        class="text-white bg-pink-500 active:bg-pink-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                        type="button"
-                        onclick="location.href='/register'"
+                            class="text-white bg-pink-500 active:bg-pink-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                            type="button"
+                            onclick="location.href='/register'"
                     >
                         <i class="fas fa-user-plus"></i> Cadastro
                     </button>
                 </li>
+                 <?php } ?>
             </ul>
         </div>
     </div>

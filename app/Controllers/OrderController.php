@@ -8,14 +8,17 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class OrderController
 {
+    private $session;
     private EntityManager $entityManager;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->session = new Session();
     }
 
     public function buildForm()
@@ -47,18 +50,21 @@ class OrderController
     {
         $data = $request->request->all();
 
-//        $user = $this->entityManager->getRepository(User::class)->find($data['user_id']);
-//        if (!$user) {
-//            $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
-//            $response->send();
-//            return;
-//        }
+        $userId = $this->session->get('user');
+
+        $user = $this->entityManager->getRepository(User::class)->find($userId);
+
+        if (!$user) {
+            $response = new RedirectResponse('/dashboard/orders/form');
+            $response->send();
+            return;
+        }
 
         $order = new Order();
-        $order->setUserId(4);
-        $order->setDescription('Teste primeiro pedido');
-        $order->setQuantity(5);
-        $order->setPrice(234.99);
+        $order->setUserId($userId);
+        $order->setDescription($data['description']);
+        $order->setQuantity($data['quantity']);
+        $order->setPrice($data['price']);
         $order->setCreatedAt(new \DateTime());
         $order->setUpdatedAt(new \DateTime());
 

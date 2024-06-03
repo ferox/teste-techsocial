@@ -6,6 +6,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\HomeController;
 use App\Controllers\LoginController;
 use App\Controllers\RegisterController;
+use App\Middleware\RedirectIfAuthenticated;
 use Doctrine\ORM\EntityManager;
 use App\Controllers\UserController;
 use App\Controllers\OrderController;
@@ -28,9 +29,23 @@ class Router
         $uri = $this->request->getPathInfo();
         $method = $this->request->getMethod();
 
+        $redirectAuthMiddleware = new RedirectIfAuthenticated();
+        $authResponse = $redirectAuthMiddleware->dashboardHandle($this->request);
+
+        if ($authResponse) {
+            $authResponse->send();
+            return;
+        }
+
         $routes = [
             '/' => ['GET' =>  fn() => (new HomeController())->index()],
-            '/login' => ['GET' =>  fn() => (new LoginController())->login()],
+            '/login' => [
+                'GET' =>  fn() => (new LoginController($this->entityManager))->login($this->request),
+                'POST' =>  fn() => (new LoginController($this->entityManager))->login($this->request)
+            ],
+            '/logout' => [
+                'GET' =>  fn() => (new LoginController($this->entityManager))->logout(),
+            ],
             '/register' => ['GET' =>  fn() => (new RegisterController())->register()],
             '/dashboard' => ['GET' =>  fn() => (new DashboardController($this->entityManager))->index()],
             '/users/create' => [
