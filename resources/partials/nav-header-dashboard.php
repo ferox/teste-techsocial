@@ -2,7 +2,7 @@
     <div class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
         <a class="text-white text-sm uppercase hidden lg:inline-block font-semibold" href="/dashboard">Dashboard</a>
         <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
-            <a class="text-blueGray-500 block" href="#pablo" onclick="openDropdown(event,'user-dropdown')">
+            <a class="text-blueGray-500 block" href="#" onclick="openDropdown(event,'user-dropdown')">
                 <div class="items-center flex">
                         <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
                             <i class="fas fa-user fa-lg"></i>

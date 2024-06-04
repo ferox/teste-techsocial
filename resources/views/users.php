@@ -10,7 +10,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
     <div class="relative bg-pink-600 md:pt-32 pb-32 pt-12">
         <div class="w-full mb-12 px-4">
             <div class="flex justify-center align-middle">
-                <div id="registerAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
+                <div id="createAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
                         <span class="inline-block align-middle mr-8">
                             <b class="capitalize">Usuário criado com sucesso!</b>
                         </span>
@@ -19,7 +19,16 @@ require __DIR__ . '/../partials/nav-dashboard.php';
 
                     </button>
                 </div>
-                <div id="deletedAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
+                <div id="errorCreateAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-orange-500 hidden">
+                        <span class="inline-block align-middle mr-8">
+                            <b class="capitalize">Não foi possível criar usuário!</b>
+                        </span>
+                    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
+                        <span>×</span>
+
+                    </button>
+                </div>
+                <div id="deleteAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
                         <span class="inline-block align-middle mr-8">
                             <b class="capitalize">Usuário deletado com sucesso!</b>
                         </span>
@@ -28,9 +37,27 @@ require __DIR__ . '/../partials/nav-dashboard.php';
 
                     </button>
                 </div>
-                <div id="errorAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-orange-500 hidden">
+                <div id="errorDeleteAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-orange-500 hidden">
                         <span class="inline-block align-middle mr-8">
                             <b class="capitalize">Não foi possível deletar usuário!</b>
+                        </span>
+                    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
+                        <span>×</span>
+
+                    </button>
+                </div>
+                <div id="updateAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
+                        <span class="inline-block align-middle mr-8">
+                            <b class="capitalize">Usuário atualizado com sucesso!</b>
+                        </span>
+                    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
+                        <span>×</span>
+
+                    </button>
+                </div>
+                <div id="errorUpdateAlert" class="text-white px-12 py-4 border-0 rounded relative mb-8 bg-orange-500 hidden">
+                        <span class="inline-block align-middle mr-8">
+                            <b class="capitalize">Não foi possível atualizar usuário!</b>
                         </span>
                     <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
                         <span>×</span>
@@ -72,7 +99,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($userList as $user): ?>
+                        <?php foreach ($render_data as $user): ?>
                         <tr>
                             <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                                 <span class="ml-3 font-bold text-blueGray-600">
@@ -80,16 +107,16 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                 </span>
                             </th>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                <?= $user['last_name']; ?>
+                                <?= empty($user['last_name']) ? 'N/I' : $user['last_name'];; ?>
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                <?= $user['document']; ?>
+                                <?= empty($user['document']) ? 'N/I' : $user['document']; ?>
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                 <?= $user['email']; ?>
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                <?= $user['phone_number']; ?>
+                                <?= empty($user['phone_number']) ? 'N/I' : $user['phone_number']; ?>
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                                 <a href="#" class="text-blueGray-500 block py-1 px-3" onclick="openDropdown(event,'actions-user-<?= $user['id']; ?>')">
@@ -108,6 +135,11 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <?php
+                    if (count($render_data) === 0) { ?>
+                        <span class="flex align-middle justify-center p-8 font-semibold text-lg text-blueGray-700">Nenhum registro encontrado</span>
+                    <?php }
+                    ?>
                 </div>
             </div>
         </div>
@@ -120,6 +152,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
 </div>
 </div>
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-<script type="text/javascript" src="/assets/js/scripts.js"></script>
+<script type="text/javascript" src="/assets/js/main.js"></script>
+<script type="text/javascript" src="/assets/js/alerts.js"></script>
 </body>
 </html>

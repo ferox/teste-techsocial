@@ -123,6 +123,8 @@
     </div>
 </footer>
 </div>
-<script type="text/javascript" src="./assets/js/scripts.js"></script>
+<script type="text/javascript" src="/assets/js/main.js"></script>
+<script type="text/javascript" src="/assets/js/input-masks.js"></script>
+<script type="text/javascript" src="/assets/js/alerts.js"></script>
 </body>
 </html

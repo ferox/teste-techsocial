@@ -20,107 +20,61 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0"
                                     >
                                         <div class="flex-auto mt-8 px-4 lg:px-10 py-10 pt-0">
-                                            <form action="/users/create" method="POST">
+                                            <form id="order-create" action="/dashboard/orders/update" method="POST">
+                                                <input type="hidden" name="_method" value="PUT">
                                                 <div class="relative w-full mb-3">
                                                     <label
-                                                            for="first_name"
+                                                            for="description"
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        <span class="text-red-500">* </span>Nome
+                                                        <span class="text-red-500">* </span>Descrição do Pedido
                                                     </label>
                                                     <input
                                                             type="text"
-                                                            id="first_name"
-                                                            name="first_name"
+                                                            id="description"
+                                                            name="description"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="Nome"
+                                                            placeholder="Descrição"
+                                                            value="<?= $render_data['description'] ?>"
                                                             required
                                                     />
                                                 </div>
                                                 <div class="relative w-full mb-3">
                                                     <label
-                                                            for="last_name"
+                                                            for="quantity"
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        Sobrenome
+                                                        <span class="text-red-500">* </span>Quantidade
                                                     </label>
                                                     <input
-                                                            type="text"
-                                                            id="last_name"
-                                                            name="last_name"
+                                                            type="number"
+                                                            id="quantity"
+                                                            name="quantity"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="Sobrenome"
-                                                    />
-                                                </div>
-
-                                                <div class="relative w-full mb-3">
-                                                    <label
-                                                            for="document"
-                                                            class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                                            htmlFor="grid-password"
-                                                    >
-                                                        Documento de Identificação
-                                                    </label>
-                                                    <input
-                                                            type="text"
-                                                            id="document"
-                                                            name="document"
-                                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="RG ou CPF"
-                                                    />
-                                                </div>
-
-                                                <div class="relative w-full mb-3">
-                                                    <label
-                                                            for="email"
-                                                            class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                                            htmlFor="grid-password"
-                                                    >
-                                                        <span class="text-red-500">* </span>Email
-                                                    </label>
-                                                    <input
-                                                            type="email"
-                                                            id="email"
-                                                            name="email"
-                                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="Email"
+                                                            placeholder="Quantidade"
+                                                            value="<?= $render_data['quantity'] ?>"
                                                             required
                                                     />
                                                 </div>
 
                                                 <div class="relative w-full mb-3">
                                                     <label
-                                                            for="phone_number"
+                                                            for="price"
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        Telefone
+                                                        <span class="text-red-500">* </span>Preço
                                                     </label>
                                                     <input
                                                             type="text"
-                                                            id="phone_number"
-                                                            name="phone_number"
+                                                            id="price"
+                                                            name="price"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="Telefone"
-                                                    />
-                                                </div>
-
-                                                <div class="relative w-full mb-3">
-                                                    <label
-                                                            for="birth_date"
-                                                            class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                                            htmlFor="grid-password"
-                                                    >
-                                                        Data Nascimento
-                                                    </label>
-                                                    <input
-                                                            type="text"
-                                                            id="birth_date"
-                                                            name="birth_date"
-                                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="dd/mm/aaaa"
+                                                            placeholder="R$0,00"
+                                                            value="<?= $render_data['price'] ?>"
+                                                            required
                                                     />
                                                 </div>
                                                 <span class="p-2"><span class="text-red-500">* </span>Campos obrigatórios.</span>

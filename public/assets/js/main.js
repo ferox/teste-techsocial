@@ -1,23 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    if (localStorage.getItem('userRegistered') === 'true') {
-        const alertElement = document.getElementById('registerAlert');
-        alertElement.style.display = 'block';
-        localStorage.removeItem('userRegistered');
-    }
-
-    if (localStorage.getItem('userDeleted') === 'true') {
-        const alertElement = document.getElementById('deletedAlert');
-        alertElement.style.display = 'block';
-        localStorage.removeItem('userDeleted');
-    }
-
-    if (localStorage.getItem('error') === 'true') {
-        const alertElement = document.getElementById('errorAlert');
-        alertElement.style.display = 'block';
-        localStorage.removeItem('error');
-    }
-});
-
 function closeAlert(event){
     let element = event.target;
     while(element.nodeName !== "BUTTON"){
@@ -37,6 +17,10 @@ function closeAlert(event){
 function toggleNavbar(collapseID) {
     document.getElementById(collapseID).classList.toggle("hidden");
     document.getElementById(collapseID).classList.toggle("block");
+    document.getElementById(collapseID).classList.toggle("bg-white");
+    document.getElementById(collapseID).classList.toggle("m-2");
+    document.getElementById(collapseID).classList.toggle("py-3");
+    document.getElementById(collapseID).classList.toggle("px-6");
 }
 /* Function for dropdowns */
 function openDropdown(event, dropdownID) {

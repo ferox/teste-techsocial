@@ -37,6 +37,10 @@ class Router
             return;
         }
 
+        if ($method === 'POST' && $this->request->request->has('_method')) {
+            $method = strtoupper($this->request->request->get('_method'));
+        }
+
         $routes = [
             '/' => ['GET' =>  fn() => (new HomeController())->index()],
             '/login' => [
@@ -55,27 +59,31 @@ class Router
                 'GET' => fn() => (new UserController($this->entityManager))->index(),
             ],
             '/dashboard/users/form' => [
-                'GET' => fn() => (new UserController($this->entityManager))->buildForm(),
+                'GET' => fn() => (new UserController($this->entityManager))->buildForm('create'),
             ],
-            '/dashboard/orders/form' => [
-                'GET' => fn() => (new OrderController($this->entityManager))->buildForm(),
+            '/dashboard/users/update' => [
+                'PUT' => fn() => (new UserController($this->entityManager))->update($this->request),
             ],
             '/dashboard/orders' => [
                 'GET' => fn() => (new OrderController($this->entityManager))->index(),
                 'POST' => fn() => (new OrderController($this->entityManager))->create($this->request)
             ],
+            '/dashboard/orders/form' => [
+                'GET' => fn() => (new OrderController($this->entityManager))->buildForm('create'),
+            ],
+            '/dashboard/orders/update' => [
+                'PUT' => fn() => (new OrderController($this->entityManager))->update($this->request),
+            ],
+
         ];
 
-        // Verifique as rotas estáticas primeiro
         if (isset($routes[$uri][$method])) {
             $routes[$uri][$method]();
             return;
         }
 
-        // Verifique as rotas dinâmicas usando expressões regulares
         $dynamicRoutes = [
             '#^/dashboard/users/edit/(\d+)$#' => fn($matches) => (new UserController($this->entityManager))->edit($matches[1]),
-            '#^/dashboard/users/update/(\d+)$#' => fn($matches) => (new UserController($this->entityManager))->update($matches[1]),
             '#^/dashboard/users/delete/(\d+)$#' => fn($matches) => (new UserController($this->entityManager))->destroy($matches[1]),
             '#^/dashboard/orders/edit/(\d+)$#' => fn($matches) => (new OrderController($this->entityManager))->edit($matches[1]),
             '#^/dashboard/orders/delete/(\d+)$#' => fn($matches) => (new OrderController($this->entityManager))->destroy($matches[1]),

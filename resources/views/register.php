@@ -22,7 +22,7 @@ require __DIR__ . '/../partials/nav-home.php';
                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
                             >
-                            Nome
+                          <span class="text-red-500">* </span>Nome
                       </label>
                       <input
                         type="text"
@@ -30,6 +30,7 @@ require __DIR__ . '/../partials/nav-home.php';
                         name="first_name"
                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder="Nome"
+                        required
                             />
                     </div>
                       <div class="relative w-full mb-3">
@@ -72,7 +73,7 @@ require __DIR__ . '/../partials/nav-home.php';
                         class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
                             >
-                            Email
+                          <span class="text-red-500">* </span>Email
                       </label>
                       <input
                         type="email"
@@ -80,6 +81,7 @@ require __DIR__ . '/../partials/nav-home.php';
                         name="email"
                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder="Email"
+                        required
                             />
                     </div>
 
@@ -116,6 +118,7 @@ require __DIR__ . '/../partials/nav-home.php';
                                   placeholder="dd/mm/aaaa"
                           />
                       </div>
+                      <span class="p-2"><span class="text-red-500">* </span>Campos obrigatórios.</span>
 
                     <div class="text-center mt-6">
                       <button

@@ -2,16 +2,19 @@
 
 namespace App\Controllers;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use App\Traits\SessionUtilsTrait;
+use App\Traits\ViewsUtilsTrait;
 
 class HomeController
 {
+    use SessionUtilsTrait, ViewsUtilsTrait;
+
     public function index()
     {
-        $session =  new Session();
+        $isUserLoggedIn = $this->isUserLoggedIn();
 
-        $user_logged_in = $session->get('user');
-
-        include __DIR__ . '/../../resources/views/home.php';
+        $this->render('home', [
+            'isUserLoggedIn' => $isUserLoggedIn
+        ]);
     }
 }

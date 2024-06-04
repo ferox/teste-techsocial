@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Traits\SessionUtilsTrait;
+use App\Traits\ViewsUtilsTrait;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -10,6 +12,8 @@ use App\Models\User;
 
 class LoginController
 {
+    use SessionUtilsTrait, ViewsUtilsTrait;
+
     private EntityManager $entityManager;
     private Session $session;
 
@@ -22,23 +26,27 @@ class LoginController
 
     public function login(Request $request)
     {
+        $isUserLoggedIn = $this->isUserLoggedIn();
+
         if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
 
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
 
             if ($user) {
-                $this->session->set('user', $user->getId());
+                $this->session->set('user_logged_in', $user->getId());
                 $response = new RedirectResponse('/dashboard');
                 $response->send();
             } else {
-                $response = new RedirectResponse('/login');
-                $response->send();
+                $this->renderJS(
+                    'notFoundUserAlert',
+                    'true',
+                    '/login'
+                );
             }
         }
 
-        // Renderize o formulário de login
-        include __DIR__ . '/../../resources/views/login.php';
+        $this->render('login');
     }
 
     public function logout()

@@ -13,6 +13,9 @@ services:
     overrides:
       extra_hosts:
         - "host.docker.internal:host-gateway"
+  testdb:
+    type: postgres
+    portforward: 6666
 
 tooling:
   migrate:
@@ -23,3 +26,11 @@ tooling:
     service: appserver
     cmd:
       - "vendor/bin/phinx create "
+  pest-init:
+    service: appserver
+    cmd:
+      - "vendor/bin/pest --init"
+  run-tests:
+    service: appserver
+    cmd:
+      - "vendor/bin/pest"

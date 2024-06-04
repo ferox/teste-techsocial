@@ -2,11 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Traits\SessionUtilsTrait;
+use App\Traits\ViewsUtilsTrait;
+
 class RegisterController
 {
+    use SessionUtilsTrait, ViewsUtilsTrait;
+
     public function register()
     {
-        include __DIR__ . '/../../resources/views/register.php';
+        $isUserLoggedIn = $this->isUserLoggedIn();
+
+        $this->render('register', [
+            'isUserLoggedIn' => $isUserLoggedIn
+        ]);
     }
 
 }

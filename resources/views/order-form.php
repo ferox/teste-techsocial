@@ -20,14 +20,14 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0"
                                     >
                                         <div class="flex-auto mt-8 px-4 lg:px-10 py-10 pt-0">
-                                            <form action="/dashboard/orders" method="POST">
+                                            <form id="order-create" action="/dashboard/orders" method="POST">
                                                 <div class="relative w-full mb-3">
                                                     <label
                                                             for="description"
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        Descrição do Pedido
+                                                        <span class="text-red-500">* </span>Descrição do Pedido
                                                     </label>
                                                     <input
                                                             type="text"
@@ -35,6 +35,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="description"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Descrição"
+                                                            required
                                                     />
                                                 </div>
                                                 <div class="relative w-full mb-3">
@@ -43,7 +44,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        Quantidade
+                                                        <span class="text-red-500">* </span>Quantidade
                                                     </label>
                                                     <input
                                                             type="number"
@@ -51,6 +52,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="quantity"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Quantidade"
+                                                            required
                                                     />
                                                 </div>
 
@@ -60,16 +62,18 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                                             htmlFor="grid-password"
                                                     >
-                                                        Preço
+                                                        <span class="text-red-500">* </span>Preço
                                                     </label>
                                                     <input
                                                             type="text"
                                                             id="price"
                                                             name="price"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                            placeholder="0.00"
+                                                            placeholder="R$0,00"
+                                                            required
                                                     />
                                                 </div>
+                                                <span class="p-2"><span class="text-red-500">* </span>Campos obrigatórios.</span>
 
                                                 <div class="text-center mt-6">
                                                     <button
@@ -98,6 +102,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
 </div>
 </div>
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-<script type="text/javascript" src="/assets/js/scripts.js"></script>
+<script type="text/javascript" src="/assets/js/main.js"></script>
+<script type="text/javascript" src="/assets/js/input-masks.js"></script>
 </body>
 </html>

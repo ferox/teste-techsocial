@@ -12,9 +12,18 @@ require __DIR__ . '/../partials/nav-home.php';
         <div class="flex content-center items-center justify-center h-full">
 
             <div class="w-full lg:w-4/12 px-4">
-                <div id="registerAlert" class="text-white px-6 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
+                <div id="createAlert" class="text-white px-6 py-4 border-0 rounded relative mb-8 bg-emerald-500 hidden">
                     <span class="inline-block align-middle mr-8">
                         <b class="capitalize">Usuário criado com sucesso!</b>
+                    </span>
+                    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
+                        <span>×</span>
+
+                    </button>
+                </div>
+                <div id="notFoundUserAlert" class="text-white px-6 py-4 border-0 rounded relative mb-8 bg-yellow-500 hidden">
+                    <span class="inline-block align-middle mr-8">
+                        <b class="capitalize">Usuário não econtrado!</b>
                     </span>
                     <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 pr-4 outline-none focus:outline-none" onclick="closeAlert(event)">
                         <span>×</span>

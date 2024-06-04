@@ -99,12 +99,12 @@ class User
         $this->phone_number = $phoneNumber;
     }
 
-    public function getBirthDate(): DateTime
+    public function getBirthDate()
     {
         return $this->birth_date;
     }
 
-    public function setBirthDate(DateTime $birthDate): void
+    public function setBirthDate($birthDate): void
     {
         $this->birth_date = $birthDate;
     }

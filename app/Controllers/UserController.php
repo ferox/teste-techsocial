@@ -3,28 +3,32 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use DateTime;
+use App\Traits\FormValidationTrait;
+use App\Traits\SessionUtilsTrait;
+use App\Traits\ViewsUtilsTrait;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserController
 {
-    private $session;
+    use FormValidationTrait, SessionUtilsTrait, ViewsUtilsTrait;
     private EntityManager $entityManager;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->session = new Session();
     }
 
-    public function buildForm()
+    public function buildForm(string $controller_method, array $data = NULL): void
     {
-        {
-            include __DIR__ . '/../../resources/views/user-form.php';
+        if ($controller_method === 'create') {
+            $this->render('user-form');
+        }
+
+        if ($controller_method === 'edit') {
+            $this->render('user-edit-form', $data);
         }
     }
 
@@ -32,139 +36,164 @@ class UserController
     {
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
-        $userList = [];
+        $user_data = [];
 
         foreach ($users as $user) {
-            $userList[] = [
+            $user_data[] = [
                 'id' => $user->getId(),
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
                 'document' => $user->getDocument(),
                 'email' => $user->getEmail(),
                 'phone_number' => $user->getPhoneNumber(),
-                'birth_date' => $user->getBirthDate()->format('Y-m-d'),
             ];
         }
 
-        include __DIR__ . '/../../resources/views/users.php';
+        $this->render('users', $user_data);
 
     }
 
-    public function create(Request $request): void
+    #[NoReturn]
+    public function create(Request $request)
     {
         $data = $request->request->all();
 
-        $user_logged_in = $this->session->get('user');
+        if (!$this->checkRequiredData($data, 'user')) {
+            $this->renderJS(
+                'errorCreateAlert',
+                'true',
+                '/dashboard/users'
+            );
+        }
 
-        $date = DateTime::createFromFormat('d/m/Y', $data['birth_date']);
-        $date_formated = $date->format('Y-m-d');
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['email' => $data['email']]);
+
+        if($user) {
+            $this->renderJS(
+                'errorCreateAlert',
+                'true',
+                '/dashboard/users'
+            );
+        }
+
+        $date = is_null($this->dateFormated($data['birth_date']))
+            ? NULL
+            : NEW \DateTime($this->dateFormated($data['birth_date']));
 
         $user = new User();
         $user->setFirstName($data['first_name']);
         $user->setLastName($data['last_name']);
         $user->setDocument($data['document']);
-        $user->setEmail($data['email']);
+        $user->setEmail($this->emailFormated($data['email']));
         $user->setPhoneNumber($data['phone_number']);
-        $user->setBirthDate(new \DateTime($date_formated));
+        $user->setBirthDate($date);
         $user->setCreatedAt(new \DateTime());
         $user->setUpdatedAt(new \DateTime());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        if (isset($user_logged_in)) {
-            echo '<script>
-                localStorage.setItem("userRegistered", "true");
-                window.location.href = "/dashboard/users";
-             </script>';
-        } else {
-            echo '<script>
-                localStorage.setItem("userRegistered", "true");
-                window.location.href = "/login";
-             </script>';
+        if (!$this->isUserLoggedIn()) {
+            $this->renderJS(
+                'createAlert',
+                'true',
+                '/login'
+            );
         }
 
-        exit;
+        $this->renderJS(
+            'createAlert',
+            'true',
+            '/dashboard/users'
+        );
     }
 
+    #[NoReturn]
     public function edit($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
 
-        if ($user) {
-            $userArray = [
-                'id' => $user->getId(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'document' => $user->getDocument(),
-                'email' => $user->getEmail(),
-                'phone_number' => $user->getPhoneNumber(),
-                'birth_date' => $user->getBirthDate()->format('Y-m-d'),
-            ];
-
-            $response = new Response(json_encode($userArray), Response::HTTP_OK, ['Content-Type' => 'application/json']);
-        } else {
+        if (!$user) {
             $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+            $response->send();
         }
 
-        $response->send();
+        $this->setNewSession('user_id', $user->getId());
+
+        $user_birthdate = $user->getBirthDate()?->format('d/m/Y');
+
+        $user_data = [
+            'first_name' => $user->getFirstName(),
+            'last_name' => $user->getLastName(),
+            'document' => $user->getDocument(),
+            'email' => $user->getEmail(),
+            'phone_number' => $user->getPhoneNumber(),
+            'birth_date' => $user_birthdate,
+        ];
+
+        $this->buildForm('edit', $user_data);
     }
 
-    public function update($id)
+    #[NoReturn]
+    public function update(Request $request)
     {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request->all();
 
-        $user = $this->entityManager->getRepository(User::class)->find($id);
-        if ($user) {
-            $user->setFirstName($data['first_name'] ?? $user->getFirstName());
-            $user->setLastName($data['last_name'] ?? $user->getLastName());
-            $user->setDocument($data['document'] ?? $user->getDocument());
-            $user->setEmail($data['email'] ?? $user->getEmail());
-            $user->setPhoneNumber($data['phone_number'] ?? $user->getPhoneNumber());
-            $user->setBirthDate(new \DateTime($data['birth_date'] ?? $user->getBirthDate()->format('Y-m-d')));
-            $user->setUpdatedAt(new \DateTime());
+        $user_id = $this->getSession('user_id');
 
-            $this->entityManager->flush();
+        $user = $this->entityManager->getRepository(User::class)->find($user_id);
 
-            $response = new Response(json_encode(['status' => 'User updated']), Response::HTTP_OK, ['Content-Type' => 'application/json']);
-        } else {
-            $response = new Response(json_encode(['error' => 'User not found']), Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']);
+        if (!$user) {
+            $this->renderJS(
+                'errorUpdateAlert',
+                'true',
+                '/dashboard/users'
+            );
         }
-        $response->send();
+
+        $user->setFirstName($data['first_name'] ?? $user->getFirstName());
+        $user->setLastName($data['last_name'] ?? $user->getLastName());
+        $user->setDocument($data['document'] ?? $user->getDocument());
+        $user->setEmail($data['email'] ?? $user->getEmail());
+        $user->setPhoneNumber($data['phone_number'] ?? $user->getPhoneNumber());
+        $user->setBirthDate(new \DateTime($data['birth_date'] ?? $user->getBirthDate()->format('Y-m-d')));
+        $user->setUpdatedAt(new \DateTime());
+
+        $this->entityManager->flush();
+
+        $this->renderJS(
+            'updateAlert',
+            'true',
+            '/dashboard/users'
+        );
+
     }
 
+    #[NoReturn]
     public function destroy($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
-        $user_logged_in = $this->session->get('user');
-        $error = 'false';
+        $user_logged_id = $this->getLoggedUserId();
 
-        if ($user->getId() === $user_logged_in) {
-            $error = "true";
-
-            echo '<script>
-                localStorage.setItem("error", "' . $error . '");
-                window.location.href = "/dashboard/users";
-             </script>';
-            exit;
+        if ($user->getEmail() === 'admin@petitiones.com.br'
+            || $user->getId() === $user_logged_id
+        ) {
+            $this->renderJS(
+                'errorDeleteAlert',
+                'true',
+                '/dashboard/users'
+            );
         }
 
-        $user_deleted = 'true';
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
 
-        if ($user) {
-            $this->entityManager->remove($user);
-            $this->entityManager->flush();
-        } else {
-            $error = "true";
-            $user_deleted = 'false';
-        }
-
-        echo '<script>
-                localStorage.setItem("userDeleted", "' . $user_deleted . '");
-                localStorage.setItem("error", "' . $error . '");
-                window.location.href = "/dashboard/users";
-             </script>';
-        exit;
+        $this->renderJS(
+            'deleteAlert',
+            'true',
+            '/dashboard/users'
+        );
     }
 }

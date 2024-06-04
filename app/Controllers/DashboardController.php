@@ -2,10 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Traits\ViewsUtilsTrait;
 use Doctrine\ORM\EntityManager;
 
 class DashboardController
 {
+    use ViewsUtilsTrait;
+
     private EntityManager $entityManager;
 
     public function __construct(EntityManager $entityManager)
@@ -15,16 +18,16 @@ class DashboardController
 
     public function index()
     {
-        // Obter o total de usuários
         $userRepository = $this->entityManager->getRepository('App\Models\User');
         $totalUsers = $userRepository->count();
 
-        // Obter o total de pedidos
         $orderRepository = $this->entityManager->getRepository('App\Models\Order');
         $totalOrders = $orderRepository->count();
 
-        // Carregando a view e passando os totais
-        include __DIR__ . '/../../resources/views/dashboard.php';
+        $this->render('dashboard', [
+            'totalUsers' => $totalUsers,
+            'totalOrders' => $totalOrders
+        ]);
     }
 }
 

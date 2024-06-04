@@ -20,7 +20,8 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0"
                                     >
                                         <div class="flex-auto mt-8 px-4 lg:px-10 py-10 pt-0">
-                                            <form action="/users/create" method="POST">
+                                            <form action="/dashboard/users/update" method="POST">
+                                                <input type="hidden" name="_method" value="PUT">
                                                 <div class="relative w-full mb-3">
                                                     <label
                                                             for="first_name"
@@ -35,6 +36,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="first_name"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Nome"
+                                                            value="<?= $render_data['first_name'] ?>"
                                                             required
                                                     />
                                                 </div>
@@ -52,6 +54,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="last_name"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Sobrenome"
+                                                            value="<?= $render_data['last_name'] ?>"
                                                     />
                                                 </div>
 
@@ -69,6 +72,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="document"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="RG ou CPF"
+                                                            value="<?= $render_data['document'] ?>"
                                                     />
                                                 </div>
 
@@ -86,6 +90,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="email"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Email"
+                                                            value="<?= $render_data['email'] ?>"
                                                             required
                                                     />
                                                 </div>
@@ -104,6 +109,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="phone_number"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="Telefone"
+                                                            value="<?= $render_data['phone_number'] ?>"
                                                     />
                                                 </div>
 
@@ -121,6 +127,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             name="birth_date"
                                                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                             placeholder="dd/mm/aaaa"
+                                                            value="<?= $render_data['birth_date'] ?>"
                                                     />
                                                 </div>
                                                 <span class="p-2"><span class="text-red-500">* </span>Campos obrigatórios.</span>
@@ -130,7 +137,7 @@ require __DIR__ . '/../partials/nav-dashboard.php';
                                                             class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                                                             type="submit"
                                                     >
-                                                        Cadastrar
+                                                        Atualizar
                                                     </button>
                                                 </div>
                                             </form>
