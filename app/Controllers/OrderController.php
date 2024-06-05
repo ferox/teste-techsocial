@@ -55,7 +55,6 @@ class OrderController
         $this->render('orders', $orders_data);
     }
 
-    #[NoReturn]
     public function create(Request $request)
     {
         $data = $request->request->all();
@@ -70,6 +69,8 @@ class OrderController
                 'true',
                 '/dashboard/orders'
             );
+
+            return;
         }
 
         $order = new Order();
@@ -123,6 +124,8 @@ class OrderController
                 'true',
                 '/dashboard/orders'
             );
+
+            return;
         }
 
         $order->setUserId($order->getUserId());
@@ -150,6 +153,8 @@ class OrderController
                 'true',
                 '/dashboard/orders'
             );
+
+            return;
         }
 
         $this->entityManager->remove($order);

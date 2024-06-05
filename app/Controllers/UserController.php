@@ -53,7 +53,6 @@ class UserController
 
     }
 
-    #[NoReturn]
     public function create(Request $request)
     {
         $data = $request->request->all();
@@ -64,6 +63,8 @@ class UserController
                 'true',
                 '/dashboard/users'
             );
+
+            return;
         }
 
         $user = $this->entityManager
@@ -76,6 +77,8 @@ class UserController
                 'true',
                 '/dashboard/users'
             );
+
+            return;
         }
 
         $date = is_null($this->dateFormated($data['birth_date']))
@@ -101,6 +104,8 @@ class UserController
                 'true',
                 '/login'
             );
+
+            return;
         }
 
         $this->renderJS(
@@ -136,7 +141,6 @@ class UserController
         $this->buildForm('edit', $user_data);
     }
 
-    #[NoReturn]
     public function update(Request $request)
     {
         $data = $request->request->all();
@@ -151,6 +155,8 @@ class UserController
                 'true',
                 '/dashboard/users'
             );
+
+            return;
         }
 
         $user->setFirstName($data['first_name'] ?? $user->getFirstName());
@@ -171,7 +177,6 @@ class UserController
 
     }
 
-    #[NoReturn]
     public function destroy($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
@@ -185,6 +190,8 @@ class UserController
                 'true',
                 '/dashboard/users'
             );
+
+            return;
         }
 
         $this->entityManager->remove($user);

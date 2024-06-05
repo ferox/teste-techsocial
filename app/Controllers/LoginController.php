@@ -17,16 +17,15 @@ class LoginController
     private EntityManager $entityManager;
     private Session $session;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Session $session)
     {
         $this->entityManager = $entityManager;
-        $this->session = new Session();
+        $this->session = $session;
         $this->session->start();
     }
 
     public function login(Request $request)
     {
-        $isUserLoggedIn = $this->isUserLoggedIn();
 
         if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
@@ -43,10 +42,16 @@ class LoginController
                     'true',
                     '/login'
                 );
+
+                return;
             }
         }
 
-        $this->render('login');
+        $isUserLoggedIn = $this->isUserLoggedIn();
+
+        $this->render('login', [
+            'isUserLoggedIn' => $isUserLoggedIn,
+        ]);
     }
 
     public function logout()

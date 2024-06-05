@@ -12,16 +12,20 @@ use App\Controllers\UserController;
 use App\Controllers\OrderController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Router
 {
     private EntityManager $entityManager;
     private Request $request;
 
-    public function __construct(EntityManager $entityManager, Request $request)
+    private Session $session;
+
+    public function __construct(EntityManager $entityManager, Request $request, Session $session)
     {
         $this->entityManager = $entityManager;
         $this->request = $request;
+        $this->session = $session;
     }
 
     public function route()
@@ -44,11 +48,11 @@ class Router
         $routes = [
             '/' => ['GET' =>  fn() => (new HomeController())->index()],
             '/login' => [
-                'GET' =>  fn() => (new LoginController($this->entityManager))->login($this->request),
-                'POST' =>  fn() => (new LoginController($this->entityManager))->login($this->request)
+                'GET' =>  fn() => (new LoginController($this->entityManager, $this->session))->login($this->request),
+                'POST' =>  fn() => (new LoginController($this->entityManager, $this->session))->login($this->request)
             ],
             '/logout' => [
-                'GET' =>  fn() => (new LoginController($this->entityManager))->logout(),
+                'GET' =>  fn() => (new LoginController($this->entityManager, $this->session))->logout(),
             ],
             '/register' => ['GET' =>  fn() => (new RegisterController())->register()],
             '/dashboard' => ['GET' =>  fn() => (new DashboardController($this->entityManager))->index()],

@@ -24,5 +24,14 @@ return [
             'port' => $_ENV['DB_PORT'],
             'charset' => 'utf8',
         ],
+        'testing' => [
+            'adapter' => 'pgsql',
+            'host' => $_ENV['TEST_DB_HOST'],
+            'name' => $_ENV['TEST_DB_NAME'],
+            'user' => $_ENV['TEST_DB_USER'],
+            'pass' => $_ENV['TEST_DB_PASS'],
+            'port' => $_ENV['TEST_DB_PORT'],
+            'charset' => 'utf8',
+        ],
     ],
 ];

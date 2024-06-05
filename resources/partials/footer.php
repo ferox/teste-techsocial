@@ -23,7 +23,7 @@
             <div class="w-full lg:w-6/12 px-4">
                 <h4 class="text-3xl font-semibold">Entre em contato!</h4>
                 <h5 class="text-lg mt-0 mb-2 text-blueGray-600">
-                    Agende uma apresentação online com nosso time de consultores.
+                    Agende uma apresentação online hoje.
                 </h5>
                 <div class="mt-6 lg:mb-0 mb-6">
                     <button

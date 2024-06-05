@@ -25,7 +25,6 @@ trait ViewsUtilsTrait
         return file_exists(self::VIEWS_DIR . $view . '.php');
     }
 
-    #[NoReturn]
     public function renderJS(
         string $local_storage_key,
         string $local_storage_value,
@@ -36,7 +35,6 @@ trait ViewsUtilsTrait
                 localStorage.setItem("' . $local_storage_key . '", "' . $local_storage_value . '");
                 window.location.href = "' . $route . '";
              </script>';
-        exit;
     }
 
 }
