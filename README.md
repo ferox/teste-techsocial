@@ -1,5 +1,8 @@
 <p align="center">
-<h3 align="center">Teste Desenvolvedor FullStack PHP - TechoSocial</h3>
+  <a>
+    <img src="https://cloud.disroot.org/apps/files_sharing/publicpreview/dSMnAX4RQXpKDRZ?file=/&fileId=295473319&x=1920&y=1080&a=true&etag=41040cd2bbba5481d2a94f75eaed74d3" alt="Screenshot Site" width="500" height="100%">
+  </a>
+  <h3 align="center">Teste Desenvolvedor FullStack PHP - TechSocial</h3>
 </p>
 
 <!--ÍNDICE -->
