@@ -94,11 +94,9 @@ require __DIR__ . '/../partials/nav-dashboard.php';
             </div>
         </div>
     </div>
-    <div class="px-4 md:px-10 mx-auto w-full">
-        <?php
-        require __DIR__ . '/../partials/footer-dashboard.php';
-        ?>
-    </div>
+    <?php
+    require __DIR__ . '/../partials/footer-dashboard.php';
+    ?>
 </div>
 </div>
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
