@@ -12,7 +12,7 @@ $dotenv->load();
 
 $paths = [__DIR__ . '/../app/Models'];
 
-$isDevMode = true;
+$isDevMode = $_ENV['DEV_MODE'];
 
 $environment = $_ENV['ENV'];
 
@@ -26,10 +26,10 @@ $dbParams = [
     ],
     'testing' => [
         'driver'   => 'pdo_pgsql',
-        'host'     => $_ENV['TEST_DB_HOST'],
-        'user'     => $_ENV['TEST_DB_USER'],
-        'password' => $_ENV['TEST_DB_PASS'],
-        'dbname'   => $_ENV['TEST_DB_NAME'],
+        'host'     => $_ENV['TEST_DB_HOST'] ?? 'database',
+        'user'     => $_ENV['TEST_DB_USER'] ?? 'postgres',
+        'password' => $_ENV['TEST_DB_PASS'] ?? '',
+        'dbname'   => $_ENV['TEST_DB_NAME'] ?? 'testdb',
     ]
 
 ];
